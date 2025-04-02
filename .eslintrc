@@ -1,0 +1,42 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier",
+  ],
+  "plugins": ["import"],
+  "rules": {
+    "import/no-default-export": "error",
+    "react/prop-types": "off",
+    "unused-imports/no-unused-imports": "error",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          ["parent", "sibling", "index", "object"],
+          "type",
+        ],
+        "pathGroups": [],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true,
+        },
+        "newlines-between": "always",
+      },
+    ],
+  },
+  "settings": {
+    "react": {
+      "version": "detect",
+    },
+  },
+}
