@@ -11,7 +11,8 @@
 
   // ファイル処理の設定
   "files": {
-    "ignoreUnknown": false // 未知のファイルタイプを無視しない
+    "ignoreUnknown": false, // 未知のファイルタイプを無視しない
+    "ignore": [".next/**/*"] // .nextディレクトリを無視
   },
 
   // コードフォーマッターの設定
@@ -19,7 +20,8 @@
     "enabled": true, // フォーマッターを有効化
     "indentStyle": "space", // スペースインデントを使用
     "indentWidth": 2, // インデント幅を2スペースに設定
-    "lineWidth": 80 // 1行の最大文字数を80文字に設定
+    "lineWidth": 80, // 1行の最大文字数を80文字に設定
+    "ignore": [".next/**/*"] // .nextディレクトリを無視
   },
 
   // インポート文の整理設定
@@ -53,7 +55,8 @@
       "complexity": {
         "noForEach": "error" // forEachの使用をエラー
       }
-    }
+    },
+    "ignore": [".next/**/*"]
   },
 
   // JavaScript固有の設定
