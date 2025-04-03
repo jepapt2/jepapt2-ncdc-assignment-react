@@ -6,12 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "biome lint <files>",
-    "format": "biome format <files>",
-    "check": "biome check <files>",
-    "lint:fix": "biome lint --write <files>",
-    "format:fix": "biome format --write <files>",
-    "check:fix": "biome check --write <files>"
+    "lint": "biome lint",
+    "format": "biome format",
+    "check": "biome check",
+    "lint:fix": "biome lint --write",
+    "format:fix": "biome format --write",
+    "check:fix": "biome check --write"
   },
 
   "dependencies": {
