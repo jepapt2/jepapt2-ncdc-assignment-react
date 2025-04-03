@@ -1,0 +1,70 @@
+{
+  // Biomeの設定スキーマ定義
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+
+  // バージョン管理システムの設定
+  "vcs": {
+    "enabled": true, // VCSの統合を有効化
+    "clientKind": "git", // Gitを使用
+    "useIgnoreFile": false // .gitignoreファイルを使用しない
+  },
+
+  // ファイル処理の設定
+  "files": {
+    "ignoreUnknown": false // 未知のファイルタイプを無視しない
+  },
+
+  // コードフォーマッターの設定
+  "formatter": {
+    "enabled": true, // フォーマッターを有効化
+    "indentStyle": "space", // スペースインデントを使用
+    "indentWidth": 2, // インデント幅を2スペースに設定
+    "lineWidth": 80 // 1行の最大文字数を80文字に設定
+  },
+
+  // インポート文の整理設定
+  "organizeImports": {
+    "enabled": true // インポートの自動整理を有効化
+  },
+
+  // リンターの設定
+  "linter": {
+    "enabled": true, // リンターを有効化
+    "rules": {
+      "recommended": true, // 推奨ルールを有効化
+
+      // コードの正確性に関するルール
+      "correctness": {
+        "noUnusedImports": "warn", // 未使用のインポートを警告
+        "noUnusedVariables": "error" // 未使用の変数をエラー
+      },
+
+      // 疑わしいコードパターンのルール
+      "suspicious": {
+        "noExplicitAny": "error" // any型の使用をエラー
+      },
+
+      // スタイルに関するルール
+      "style": {
+        "useConst": "error" // letの代わりにconstの使用を強制
+      },
+
+      // コードの複雑さに関するルール
+      "complexity": {
+        "noForEach": "error" // forEachの使用をエラー
+      }
+    }
+  },
+
+  // JavaScript固有の設定
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double" //ダブルクォートを使用
+    }
+  },
+  "json": {
+    "formatter": {
+      "trailingCommas": "none" // JSONは末尾のカンマなし
+    }
+  }
+}
