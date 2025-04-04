@@ -47,16 +47,17 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: calc(var(--radius));
+  --radius-md: calc(var(--radius) * 2);
+  --radius-lg: calc(var(--radius) * 3);
+  --radius-xl: calc(var(--radius) * 4);
   --font-noto: var(--font-noto), sans-serif;
   --font-audiowide: var(--font-audiowide), sans-serif;
 }
 
 :root {
-  --radius: 0.625rem;
+  --spacing: 10px;
+  --radius: 4px;
   --brand-primary: #4cb3f8;
   --black80: #333333;
   --black50: #4d4d4d;
