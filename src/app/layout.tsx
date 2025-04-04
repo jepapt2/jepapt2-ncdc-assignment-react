@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Audiowide, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
+import "@/lib/styles/reset.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const audiowide = Audiowide({
+  display: "swap",
   subsets: ["latin"],
+  weight: "400",
+  variable: "--font-audiowide",
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const noto = Noto_Sans_JP({
+  display: "swap",
+  preload: false,
+  variable: "--font-noto",
 });
 
 export const metadata: Metadata = {
@@ -23,10 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="ja">
+      <body className={`${noto.variable} ${audiowide.variable} antialiased`}>
+        <div className="bg-brand-primary">
+          <p className="text-brand-primary">testaあa</p>
+        </div>
         {children}
       </body>
     </html>
