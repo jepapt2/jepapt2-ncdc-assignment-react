@@ -28,8 +28,11 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${noto.variable} ${audiowide.variable} antialiased`}>
-        <div className="bg-brand-primary">
-          <p className="text-brand-primary">testaあa</p>
+        <div>
+          <p className="text-title">testaあa</p>
+          <p className="text-body">testaあa</p>
+          <p className="text-caption">testaあa</p>
+          <p className="text-minimum">testaあa</p>
         </div>
         {children}
       </body>
