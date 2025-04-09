@@ -3014,6 +3014,11 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
+valibot@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/valibot/-/valibot-1.0.0.tgz#1f82514296abcd23d0ae4280088ba85f8651c564"
+  integrity sha512-1Hc0ihzWxBar6NGeZv7fPLY0QuxFMyxwYR2sF1Blu7Wq7EnremwY2W02tit2ij2VJT8HcSkHAQqmFfl77f73Yw==
+
 which-boxed-primitive@^1.1.0, which-boxed-primitive@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/which-boxed-primitive/-/which-boxed-primitive-1.1.1.tgz#d76ec27df7fa165f18d5808374a5fe23c29b176e"
