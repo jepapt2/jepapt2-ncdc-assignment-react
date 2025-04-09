@@ -6,8 +6,7 @@
 │     ├─ components/    # 投稿関連のコンポーネント
 │        ├─ Post.tsx    # 単一投稿表示コンポーネント
 │        └─ Posts.tsx   # 投稿一覧表示コンポーネント
-│     ├─ hooks/         # 投稿関連のカスタムフック
-│        └─ usePost.ts  # 投稿データ操作用フック
+│     ├─ libs/         # 投稿関連の関数
 │     └─ types/         # 投稿関連の型定義
 ├─ components/          # 共通コンポーネント
 ├─ shadcn/             # shadcn UIライブラリ関連

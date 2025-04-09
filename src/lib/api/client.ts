@@ -5,9 +5,6 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 axiosInstance.interceptors.request.use(
@@ -57,7 +54,8 @@ export async function get<T>(
   options?: ApiRequestOptions,
 ): Promise<ApiResponse<T>> {
   try {
-    const response = await axios.get(`${API_BASE_URL}${url}`, {
+    console.log(API_BASE_URL + url);
+    const response = await axiosInstance.get(url, {
       headers: options?.headers,
       params: options?.params,
     });
@@ -80,7 +78,7 @@ export async function post<T>(
   options?: ApiRequestOptions,
 ): Promise<ApiResponse<T>> {
   try {
-    const response = await axios.post(`${API_BASE_URL}${url}`, data, {
+    const response = await axiosInstance.post(url, data, {
       headers: options?.headers,
       params: options?.params,
     });
