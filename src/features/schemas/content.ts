@@ -5,17 +5,18 @@ export const contentSchema = v.object({
   title: v.optional(
     v.pipe(
       v.string(),
-      v.maxLength(100, "タイトルは100文字以内で入力してください"),
+      v.maxLength(50, "タイトルは50文字以内で入力してください"),
     ),
   ),
   body: v.optional(
     v.pipe(
       v.string(),
-      v.maxLength(2000, "本文は2000文字以内で入力してください"),
+      v.minLength(10, "本文は10文字以上で入力してください"),
+      v.maxLength(1000, "本文は1000文字以内で入力してください"),
     ),
   ),
-  createdAt: v.optional(v.string()),
-  updatedAt: v.optional(v.string()),
+  createdAt: v.optional(v.date()),
+  updatedAt: v.optional(v.date()),
 });
 
 export type ContentSchema = v.InferInput<typeof contentSchema>;
