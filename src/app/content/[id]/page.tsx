@@ -1,14 +1,11 @@
 import ContentLayout from "@/features/content/components/ContentLayout";
 import { notFound } from "next/navigation";
 
-interface ContentsPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function ContentsPage({ params }: ContentsPageProps) {
-  const { id } = params;
+export default async function ContentsPage({
+  params,
+}: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
 
   // IDが数字以外の場合は404ページにリダイレクト
   if (!/^\d+$/.test(id)) {

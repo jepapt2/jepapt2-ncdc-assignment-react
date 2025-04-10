@@ -7,7 +7,8 @@
   --color-black-80: var(--black80);
   --color-black-50: var(--black50);
   --color-black-30: var(--black30);
-  --color-light-bg: var(--bg-light);
+  --color-light-bg: var(--black10);
+  --color-light-bg-secondary: var(--black11);
   --color-dark-bg: var(--bg-dark);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -59,7 +60,8 @@
   --black80: #333333;
   --black50: #4d4d4d;
   --black30: #b3b3b3;
-  --bg-light: #f5f8fa;
+  --black11: #f6f8fa;
+  --black10: #f5f8fa;
   --bg-dark: #cbe6fa;
   --text-size-title: 24px;
   --text-size-body: 16px;
