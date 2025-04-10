@@ -3,14 +3,12 @@
 
 @theme inline {
   /* カラー設定 */
-  --color-brand-primary: var(--brand-primary);
-  --color-text-regular: var(--black80);
-  --color-text-light: var(--black50);
-  --color-text-brand: var(--brand-primary);
-  --color-button-primary: var(--brand-primary);
-  --color-button-normal: var(--black30);
-  --color-bg-light: var(--bg-light);
-  --color-bg-dark: var(--bg-dark);
+  --color-brand: var(--brand-primary);
+  --color-black-80: var(--black80);
+  --color-black-50: var(--black50);
+  --color-black-30: var(--black30);
+  --color-light-bg: var(--bg-light);
+  --color-dark-bg: var(--bg-dark);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   /* フォント設定 */
