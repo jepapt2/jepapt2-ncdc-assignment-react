@@ -50,7 +50,7 @@ function handleError(error: unknown): never {
 /**
  * GETリクエスト
  */
-export async function get<
+export async function getApi<
   T extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
 >({
   url,
@@ -80,7 +80,7 @@ export async function get<
 /**
  * POSTリクエスト
  */
-export async function post<
+export async function postApi<
   T extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
 >({
   url,
