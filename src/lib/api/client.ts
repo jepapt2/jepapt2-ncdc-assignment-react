@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as v from "valibot";
 import type { ApiError, ApiRequestOptions, ApiResponse } from "./types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
@@ -43,25 +44,32 @@ function handleError(error: unknown): never {
     message:
       error instanceof Error ? error.message : "不明なエラーが発生しました",
     status: 500,
-  } as ApiError;
+  };
 }
 
 /**
  * GETリクエスト
  */
-export async function get<T>(
-  url: string,
-  options?: ApiRequestOptions,
-): Promise<ApiResponse<T>> {
+export async function get<
+  T extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+>({
+  url,
+  schema,
+  options,
+}: {
+  url: string;
+  schema: T;
+  options?: ApiRequestOptions;
+}): Promise<ApiResponse<v.InferOutput<T>>> {
   try {
     console.log(API_BASE_URL + url);
     const response = await axiosInstance.get(url, {
       headers: options?.headers,
       params: options?.params,
     });
-
+    const parsedResponseData = v.parse(schema, response.data);
     return {
-      data: response.data,
+      data: parsedResponseData,
       status: response.status,
     };
   } catch (error) {
@@ -72,19 +80,28 @@ export async function get<T>(
 /**
  * POSTリクエスト
  */
-export async function post<T>(
-  url: string,
-  data: T,
-  options?: ApiRequestOptions,
-): Promise<ApiResponse<T>> {
+export async function post<
+  T extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+>({
+  url,
+  data,
+  schema,
+  options,
+}: {
+  url: string;
+  data: T;
+  schema: T;
+  options?: ApiRequestOptions;
+}): Promise<ApiResponse<v.InferOutput<T>>> {
   try {
-    const response = await axiosInstance.post(url, data, {
+    const parsedData = v.parse(schema, data);
+    const response = await axiosInstance.post(url, parsedData, {
       headers: options?.headers,
       params: options?.params,
     });
-
+    const parsedResponseData = v.parse(schema, response.data);
     return {
-      data: response.data,
+      data: parsedResponseData,
       status: response.status,
     };
   } catch (error) {
