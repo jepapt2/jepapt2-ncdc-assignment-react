@@ -17,12 +17,24 @@ export const contentSchema = v.object({
       v.maxLength(1000, "本文は1000文字以内で入力してください"),
     ),
   ),
-  createdAt: v.optional(v.date()),
-  updatedAt: v.optional(v.date()),
+  createdAt: v.optional(
+    v.pipe(
+      v.string(),
+      v.transform((date) => new Date(date)),
+    ),
+  ),
+  updatedAt: v.optional(
+    v.pipe(
+      v.string(),
+      v.transform((date) => new Date(date)),
+    ),
+  ),
 });
 
-export type ContentSchema = v.InferInput<typeof contentSchema>;
+export const contentListSchema = v.array(contentSchema);
 
+export type ContentSchema = v.InferOutput<typeof contentSchema>;
+export type ContentListSchema = v.InferOutput<typeof contentListSchema>;
 // 作成用スキーマ（titleとbodyのみ）
 export const createContentDTOSchema = v.pick(contentSchema, ["title", "body"]);
 export type CreateContentDTOSchema = v.InferOutput<
