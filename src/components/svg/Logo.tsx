@@ -1,9 +1,4 @@
-interface LogoProps {
-  width?: number | string;
-  height?: number | string;
-  className?: string;
-  color?: string;
-}
+import type { SVGIconProps } from "./types";
 
 /**
  * ロゴのSVGコンポーネント
@@ -17,7 +12,7 @@ export default function Logo({
   height = 32,
   className = "",
   color = "#4CB3F8",
-}: LogoProps) {
+}: SVGIconProps) {
   return (
     <svg
       width={width}
