@@ -62,7 +62,6 @@ export async function getApi<
   options?: ApiRequestOptions;
 }): Promise<ApiResponse<v.InferOutput<T>>> {
   try {
-    console.log(API_BASE_URL + url);
     const response = await axiosInstance.get(url, {
       headers: options?.headers,
       params: options?.params,
@@ -82,26 +81,100 @@ export async function getApi<
  */
 export async function postApi<
   T extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+  K extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
 >({
   url,
   data,
-  schema,
+  createSchema,
+  responseSchema,
   options,
 }: {
   url: string;
-  data: T;
-  schema: T;
+  data: v.InferInput<T>;
+  createSchema: T;
+  responseSchema: K;
   options?: ApiRequestOptions;
-}): Promise<ApiResponse<v.InferOutput<T>>> {
+}): Promise<ApiResponse<v.InferOutput<K>>> {
   try {
-    const parsedData = v.parse(schema, data);
+    const parsedData = v.parse(createSchema, data);
     const response = await axiosInstance.post(url, parsedData, {
       headers: options?.headers,
       params: options?.params,
     });
-    const parsedResponseData = v.parse(schema, response.data);
+    const parsedResponseData = v.parse(responseSchema, response.data);
     return {
       data: parsedResponseData,
+      status: response.status,
+    };
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
+/**
+ * PUTリクエスト
+ */
+export async function putApi<
+  T extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+  K extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+>({
+  url,
+  data,
+  updateSchema,
+  responseSchema,
+  options,
+}: {
+  url: string;
+  data: v.InferInput<T>;
+  updateSchema: T;
+  responseSchema: K;
+  options?: ApiRequestOptions;
+}): Promise<ApiResponse<v.InferOutput<K>>> {
+  try {
+    const parsedData = v.parse(updateSchema, data);
+    const response = await axiosInstance.put(url, parsedData, {
+      headers: options?.headers,
+      params: options?.params,
+    });
+    const parsedResponseData = v.parse(responseSchema, response.data);
+    return {
+      data: parsedResponseData,
+      status: response.status,
+    };
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
+/**
+ * DELETEリクエスト
+ */
+export async function deleteApi<
+  T extends v.BaseSchema<unknown, unknown, v.BaseIssue<unknown>>,
+>({
+  url,
+  schema,
+  options,
+}: {
+  url: string;
+  schema?: T;
+  options?: ApiRequestOptions;
+}): Promise<ApiResponse<v.InferOutput<T> | undefined>> {
+  try {
+    const response = await axiosInstance.delete(url, {
+      headers: options?.headers,
+      params: options?.params,
+    });
+    // スキーマが指定場合はパースして返す
+    if (schema) {
+      const parsedResponseData = v.parse(schema, response.data);
+      return {
+        data: parsedResponseData,
+        status: response.status,
+      };
+    }
+    return {
+      data: response.data,
       status: response.status,
     };
   } catch (error) {
