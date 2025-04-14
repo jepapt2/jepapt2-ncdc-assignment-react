@@ -24,11 +24,6 @@
     "ignore": [".next/**/*"] // .nextディレクトリを無視
   },
 
-  // インポート文の整理設定
-  "organizeImports": {
-    "enabled": true // インポートの自動整理を有効化
-  },
-
   // リンターの設定
   "linter": {
     "enabled": true, // リンターを有効化
