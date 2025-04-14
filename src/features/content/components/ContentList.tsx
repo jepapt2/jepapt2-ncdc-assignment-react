@@ -14,5 +14,4 @@ async function ContentList() {
     </>
   );
 }
-
 export default ContentList;
