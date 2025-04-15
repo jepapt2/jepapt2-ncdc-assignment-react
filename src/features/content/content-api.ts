@@ -102,14 +102,14 @@ export async function updateContent(
  * @param id 削除するコンテンツID
  * @returns 削除結果
  */
-export async function deleteContent(id: number): Promise<boolean> {
+export async function deleteContent(content: ContentSchema): Promise<boolean> {
   try {
     const response = await deleteApi({
-      url: `${contentUrl}/${id}`,
+      url: `${contentUrl}/${content.id}`,
     });
     return response.status === 204;
   } catch (error) {
-    console.error(`コンテンツ(ID: ${id})の削除に失敗しました`, error);
+    console.error(`コンテンツ(ID: ${content.id})の削除に失敗しました`, error);
     throw new Error("コンテンツの削除に失敗しました");
   }
 }
