@@ -149,12 +149,6 @@ export default function ContentEditor({ content }: ContentEditorProps) {
               />
             </>
           )}
-
-          {/* <div className="flex justify-between text-xs text-gray-400 mt-8 pt-4 border-t border-gray-200">
-          <div>Copyright © 2021 Sample</div>
-          <div>運営会社</div>
-        </div> */}
-          {/* コピーライト */}
         </div>
       </form>
     </div>

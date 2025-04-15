@@ -14,8 +14,13 @@ export default function ContentLayout({ children }: ContentLayoutProps) {
 
       <ContentSidebar />
 
-      {/* メインコンテンツ */}
-      <div className="flex-1 p-4">{children}</div>
+      <div className="flex-1 pt-4 px-4 flex flex-col">
+        {children}
+        <div className="h-6 flex items-center justify-between text-caption">
+          <p>Copyright © 2021 Sample</p>
+          <p>運営会社</p>
+        </div>
+      </div>
     </div>
   );
 }
