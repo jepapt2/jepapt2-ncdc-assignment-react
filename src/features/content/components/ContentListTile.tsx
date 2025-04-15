@@ -1,13 +1,12 @@
 "use client";
-
-import { useAtom } from "jotai";
-("../atom/contentListAtom");
-import { useParams } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { isEditingContentListAtom } from "../atom/contentListAtom";
 import type { ContentSchema } from "../schemas/content";
 import DeleteIconButton from "@/components/DeleteIconButton";
-import { deleteContent } from "../content-api";
+import { deleteContentAction } from "../actions";
+import { useAtom } from "jotai";
+import { useParams } from "next/navigation";
+
 type ContentListTileProps = {
   content: ContentSchema;
 };
@@ -15,6 +14,10 @@ type ContentListTileProps = {
 export default function ContentListTile({ content }: ContentListTileProps) {
   const [isEditing] = useAtom(isEditingContentListAtom);
   const params = useParams();
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await deleteContentAction(content);
+  };
 
   return (
     <a href={`/content/${content.id}`} key={content.id}>
@@ -27,15 +30,7 @@ export default function ContentListTile({ content }: ContentListTileProps) {
         )}
       >
         <p className="truncate">{content.title}</p>
-        {isEditing && (
-          <DeleteIconButton
-            onClick={async (e) => {
-              e.preventDefault();
-              const response = await deleteContent(content.id);
-              console.log(response);
-            }}
-          />
-        )}
+        {isEditing && <DeleteIconButton onClick={handleDelete} />}
       </div>
     </a>
   );
