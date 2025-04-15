@@ -14,7 +14,9 @@
     "ignoreUnknown": false, // 未知のファイルタイプを無視しない
     "ignore": [".next/**/*"] // .nextディレクトリを無視
   },
-
+  "organizeImports": {
+    "enabled": false // インポートの自動整理を無効化
+  },
   // コードフォーマッターの設定
   "formatter": {
     "enabled": true, // フォーマッターを有効化
