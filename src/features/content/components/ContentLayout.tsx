@@ -15,7 +15,7 @@ export default function ContentLayout({ children }: ContentLayoutProps) {
       <ContentSidebar />
 
       {/* メインコンテンツ */}
-      <div>{children}</div>
+      <div className="flex-1 p-4">{children}</div>
     </div>
   );
 }
