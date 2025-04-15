@@ -100,7 +100,7 @@ const ActionButton = ({
   const { icon, text } = actionConfig[action];
 
   return (
-    <button className={baseStyle()} {...props}>
+    <button className={baseStyle()} type={type} {...props}>
       {icon}
       <span className={textStyle()}>{text}</span>
     </button>

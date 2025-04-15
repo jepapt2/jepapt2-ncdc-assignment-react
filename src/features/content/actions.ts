@@ -1,9 +1,15 @@
+//revalidatePathはサーバーサイドでのみ使用できる
 "use server";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { deleteContent, getContentList } from "./content-api";
-import type { ContentSchema } from "./schemas/content";
+import {
+  deleteContent,
+  getContentList,
+  createContent,
+  updateContent,
+} from "./content-api";
+import type { ContentSchema, CreateContentDTOSchema } from "./schemas/content";
 
 export async function deleteContentAction(
   content: ContentSchema,
@@ -26,5 +32,28 @@ export async function deleteContentAction(
       // コンテンツがない場合は新規作成ページへ遷移
       redirect("/content/new");
     }
+  }
+}
+
+export async function saveContentAction({
+  content,
+  currentContent,
+}: {
+  content: CreateContentDTOSchema;
+  currentContent?: ContentSchema;
+}) {
+  try {
+    // 現在のコンテンツが存在する場合は更新、存在しない場合は作成
+    if (currentContent) {
+      await updateContent(currentContent.id, content);
+    } else {
+      await createContent(content);
+    }
+    // パスの再検証
+    revalidatePath("/content");
+    return { success: true, content };
+  } catch (error) {
+    console.error("コンテンツの作成に失敗しました", error);
+    return { success: false };
   }
 }
