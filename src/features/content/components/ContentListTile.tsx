@@ -5,7 +5,7 @@ import type { ContentSchema } from "../schemas/content";
 import DeleteIconButton from "@/components/DeleteIconButton";
 import { deleteContentAction } from "../actions";
 import { useAtom } from "jotai";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 type ContentListTileProps = {
   content: ContentSchema;
@@ -14,9 +14,21 @@ type ContentListTileProps = {
 export default function ContentListTile({ content }: ContentListTileProps) {
   const [isEditing] = useAtom(isEditingContentListAtom);
   const params = useParams();
+  const router = useRouter();
+
+  // 現在表示中のコンテンツIDを数値として取得
+  const currentContentId = params.id ? Number(params.id) : undefined;
+
+  // 現在表示中のコンテンツかどうかを判定
+  const isCurrentContent = currentContentId === content.id;
+
   const handleDelete = async (e: React.MouseEvent) => {
     e.preventDefault();
-    await deleteContentAction(content);
+    if (window.confirm("このコンテンツを削除してもよろしいですか？")) {
+      // 現在のコンテンツIDを渡して削除処理を実行
+      await deleteContentAction(content, currentContentId);
+      router.refresh();
+    }
   };
 
   return (
@@ -25,8 +37,7 @@ export default function ContentListTile({ content }: ContentListTileProps) {
         className={twMerge(
           "rounded-sm p-1 text-body hover:cursor-pointer flex items-center justify-between",
           //閲覧中のコンテンツの場合
-          params.id === String(content.id) &&
-            "bg-light-bg text-brand font-bold",
+          isCurrentContent && "bg-light-bg text-brand font-bold",
         )}
       >
         <p className="truncate">{content.title}</p>
