@@ -5,6 +5,7 @@ import ActionButton from "@/components/ActionButton";
 import { createContentDTOSchema, type ContentSchema } from "../schemas/content";
 import { useForm } from "@tanstack/react-form";
 import { saveContentAction } from "../actions";
+import { useRouter } from "next/navigation";
 
 interface ContentEditorProps {
   content?: ContentSchema;
@@ -12,8 +13,10 @@ interface ContentEditorProps {
 
 export default function ContentEditor({ content }: ContentEditorProps) {
   const [isPending, startTransition] = useTransition();
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  // タイトルが存在しない場合は編集モードにする
+  const [isEditingTitle, setIsEditingTitle] = useState(!content?.title);
   const [isEditingBody, setIsEditingBody] = useState(false);
+  const router = useRouter();
 
   const form = useForm({
     defaultValues: {
@@ -25,10 +28,16 @@ export default function ContentEditor({ content }: ContentEditorProps) {
     },
     onSubmit: async ({ value }) => {
       startTransition(async () => {
-        await saveContentAction({
+        const result = await saveContentAction({
           content: value,
           currentContent: content,
         });
+
+        // 新規作成の場合は作成されたコンテンツのIDに遷移
+        if (result?.success && !content && result.content?.id) {
+          router.push(`/content/${result.content.id}`);
+          return;
+        }
       });
     },
   });
