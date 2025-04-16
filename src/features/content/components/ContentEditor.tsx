@@ -1,8 +1,12 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useOptimistic, useState, useTransition } from "react";
 import ActionButton from "@/components/ActionButton";
-import { createContentDTOSchema, type ContentSchema } from "../schemas/content";
+import {
+  type ContentSchema,
+  type CreateContentDTOSchema,
+  createContentDTOSchema,
+} from "../schemas/content";
 import { useForm } from "@tanstack/react-form";
 import { saveContentAction } from "../actions";
 import { useRouter } from "next/navigation";
@@ -12,45 +16,73 @@ interface ContentEditorProps {
 }
 
 export default function ContentEditor({ content }: ContentEditorProps) {
+  // 表示用のコンテンツ
+  const [displayContent, setOptimisticContent] = useOptimistic(
+    { title: content?.title, body: content?.body },
+    (currentContent, optimisticContent: Partial<ContentSchema>) => ({
+      ...currentContent,
+      ...optimisticContent,
+    }),
+  );
   const [isPending, startTransition] = useTransition();
   // タイトルが存在しない場合は編集モードにする
   const [isEditingTitle, setIsEditingTitle] = useState(!content?.title);
   const [isEditingBody, setIsEditingBody] = useState(false);
   const router = useRouter();
 
+  // 編集対象を示す型の定義
+  type EditTarget = "title" | "body";
+
+  const defaultValues: CreateContentDTOSchema = {
+    title: content?.title,
+    body: content?.body,
+  };
+
   const form = useForm({
-    defaultValues: {
-      title: content?.title ?? "",
-      body: content?.body ?? "",
-    },
+    defaultValues: defaultValues,
     validators: {
       onChange: createContentDTOSchema,
     },
-    onSubmit: async ({ value }) => {
+    // 送信時のメタデータ
+    onSubmitMeta: "title" satisfies EditTarget,
+    onSubmit: async ({ value, meta: saveValueKey }) => {
       startTransition(async () => {
+        setOptimisticContent(value);
+
+        // 更新するフィールドを決定
+        const contentToSave: CreateContentDTOSchema = {
+          title: saveValueKey === "title" ? value.title : content?.title,
+          body: saveValueKey === "body" ? value.body : content?.body,
+        };
+
         const result = await saveContentAction({
-          content: value,
+          content: contentToSave,
           currentContent: content,
         });
+        // エラーが発生した場合は元のコンテンツを表示
+        if (!result.success && content) {
+          setOptimisticContent(content);
+          return;
+        }
 
         // 新規作成の場合は作成されたコンテンツのIDに遷移
-        if (result?.success && !content && result.content?.id) {
+        if (!content && result.content?.id) {
           router.push(`/content/${result.content.id}`);
           return;
+        }
+        // 編集対象のフィールドを閉じる
+        if (saveValueKey === "title") {
+          setIsEditingTitle(false);
+        } else {
+          setIsEditingBody(false);
         }
       });
     },
   });
   // ボタンクリック時の処理
-  const buttonClickHandler = async (saveValue: "title" | "body") => {
+  const buttonClickHandler = async (saveValueKey: "title" | "body") => {
     // フォーム送信処理
-    await form.handleSubmit().then(() => {
-      if (saveValue === "title") {
-        setIsEditingTitle(false);
-      } else if (saveValue === "body") {
-        setIsEditingBody(false);
-      }
-    });
+    await form.handleSubmit(saveValueKey);
   };
   // フォーム送信時の処理
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,6 +91,16 @@ export default function ContentEditor({ content }: ContentEditorProps) {
     form.handleSubmit().then(() => {
       setIsEditingTitle(false);
     });
+  };
+
+  // キャンセル時の処理
+  const handleTitleCancel = () => {
+    setIsEditingTitle(false);
+    form.setFieldValue("title", displayContent.title);
+  };
+  const handleBodyCancel = () => {
+    setIsEditingBody(false);
+    form.setFieldValue("body", content?.body ?? "");
   };
 
   return (
@@ -82,7 +124,7 @@ export default function ContentEditor({ content }: ContentEditorProps) {
                 )}
               </form.Field>
             ) : (
-              <h1 className="text-title ml-3">{content?.title}</h1>
+              <h1 className="text-title ml-3">{displayContent.title}</h1>
             )}
           </div>
           <div className="flex gap-1 ml-2">
@@ -91,7 +133,7 @@ export default function ContentEditor({ content }: ContentEditorProps) {
                 <ActionButton
                   action="cancel"
                   variant="fillGray"
-                  onClick={() => setIsEditingTitle(false)}
+                  onClick={handleTitleCancel}
                 />
                 <ActionButton
                   action="save"
@@ -135,7 +177,7 @@ export default function ContentEditor({ content }: ContentEditorProps) {
                   action="cancel"
                   variant="fillGray"
                   type="button"
-                  onClick={() => setIsEditingBody(false)}
+                  onClick={handleBodyCancel}
                 />
                 <ActionButton
                   action="save"
@@ -148,7 +190,7 @@ export default function ContentEditor({ content }: ContentEditorProps) {
           ) : (
             <>
               <div className="flex-1 overflow-y-auto rounded-md bg-white p-3">
-                <p className="text-body">{content?.body}</p>
+                <p className="text-body">{displayContent.body}</p>
               </div>
               <ActionButton
                 action="edit"

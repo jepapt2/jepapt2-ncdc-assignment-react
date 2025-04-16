@@ -27,12 +27,18 @@ export type ContentListSchema = v.InferOutput<typeof contentListSchema>;
 
 export const createContentDTOSchema = v.object({
   title: v.pipe(
-    v.string(),
+    v.optional(v.string()),
     v.title("タイトル"),
-    v.maxLength(50, "タイトルは50文字以内で入力してください"),
+    v.union([
+      v.literal(""), // 空文字列を許可
+      v.pipe(
+        v.string(),
+        v.maxLength(50, "タイトルは50文字以内で入力してください"),
+      ),
+    ]),
   ),
   body: v.pipe(
-    v.string(),
+    v.optional(v.string()),
     v.title("本文"),
     v.union([
       v.literal(""), // 空文字列を許可
@@ -45,6 +51,6 @@ export const createContentDTOSchema = v.object({
   ),
 });
 
-export type CreateContentDTOSchema = v.InferOutput<
+export type CreateContentDTOSchema = v.InferInput<
   typeof createContentDTOSchema
 >;
