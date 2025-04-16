@@ -2,21 +2,8 @@ import * as v from "valibot";
 
 export const contentSchema = v.object({
   id: v.number(),
-  title: v.optional(
-    v.pipe(
-      v.string(),
-      v.title("タイトル"),
-      v.maxLength(50, "タイトルは50文字以内で入力してください"),
-    ),
-  ),
-  body: v.optional(
-    v.pipe(
-      v.string(),
-      v.title("本文"),
-      v.minLength(10, "本文は10文字以上で入力してください"),
-      v.maxLength(1000, "本文は1000文字以内で入力してください"),
-    ),
-  ),
+  title: v.optional(v.pipe(v.string(), v.title("タイトル"))),
+  body: v.optional(v.pipe(v.string(), v.title("本文"))),
 
   createdAt: v.optional(
     v.pipe(
