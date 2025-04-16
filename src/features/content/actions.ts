@@ -43,15 +43,16 @@ export async function saveContentAction({
   currentContent?: ContentSchema;
 }) {
   try {
+    let resultData: ContentSchema;
     // 現在のコンテンツが存在する場合は更新、存在しない場合は作成
     if (currentContent) {
-      await updateContent(currentContent.id, content);
+      resultData = await updateContent(currentContent.id, content);
     } else {
-      await createContent(content);
+      resultData = await createContent(content);
     }
     // パスの再検証
     revalidatePath("/content");
-    return { success: true, content };
+    return { success: true, content: resultData };
   } catch (error) {
     console.error("コンテンツの作成に失敗しました", error);
     return { success: false };
