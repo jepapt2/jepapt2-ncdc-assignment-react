@@ -5,7 +5,8 @@ import type { ContentSchema } from "../schemas/content";
 import DeleteIconButton from "@/components/DeleteIconButton";
 import { deleteContentAction } from "../actions";
 import { useAtom } from "jotai";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
 
 type ContentListTileProps = {
   content: ContentSchema;
@@ -14,7 +15,6 @@ type ContentListTileProps = {
 export default function ContentListTile({ content }: ContentListTileProps) {
   const [isEditing] = useAtom(isEditingContentListAtom);
   const params = useParams();
-  const router = useRouter();
 
   // 現在表示中のコンテンツIDを数値として取得
   const currentContentId = params.id ? Number(params.id) : undefined;
@@ -26,8 +26,10 @@ export default function ContentListTile({ content }: ContentListTileProps) {
     e.preventDefault();
     if (window.confirm("このコンテンツを削除してもよろしいですか？")) {
       // 現在のコンテンツIDを渡して削除処理を実行
-      await deleteContentAction(content, currentContentId);
-      router.refresh();
+      const result = await deleteContentAction(content, currentContentId);
+      if (!result.success) {
+        toast.error("コンテンツの削除に失敗しました");
+      }
     }
   };
 
