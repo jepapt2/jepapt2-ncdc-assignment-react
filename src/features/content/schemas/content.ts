@@ -4,7 +4,6 @@ export const contentSchema = v.object({
   id: v.number(),
   title: v.optional(v.pipe(v.string(), v.title("タイトル"))),
   body: v.optional(v.pipe(v.string(), v.title("本文"))),
-
   createdAt: v.optional(
     v.pipe(
       v.string(),
@@ -27,27 +26,24 @@ export type ContentListSchema = v.InferOutput<typeof contentListSchema>;
 
 export const createContentDTOSchema = v.object({
   title: v.pipe(
-    v.optional(v.string()),
+    v.string(),
+    v.minLength(1, "タイトルは1文字以上で入力してください"),
+    v.maxLength(50, "タイトルは50文字以内で入力してください"),
     v.title("タイトル"),
-    v.union([
-      v.literal(""), // 空文字列を許可
-      v.pipe(
-        v.string(),
-        v.maxLength(50, "タイトルは50文字以内で入力してください"),
-      ),
-    ]),
   ),
-  body: v.pipe(
-    v.optional(v.string()),
-    v.title("本文"),
-    v.union([
-      v.literal(""), // 空文字列を許可
-      v.pipe(
-        v.string(),
-        v.minLength(10, "本文は10文字以上で入力してください"),
-        v.maxLength(1000, "本文は1000文字以内で入力してください"),
-      ),
-    ]),
+  body: v.optional(
+    v.pipe(
+      v.string(),
+      v.title("本文"),
+      v.union([
+        v.literal(""),
+        v.pipe(
+          v.string(),
+          v.minLength(10, "本文は10文字以上で入力してください"),
+          v.maxLength(1000, "本文は1000文字以内で入力してください"),
+        ),
+      ]),
+    ),
   ),
 });
 
