@@ -65,6 +65,7 @@ export default function ContentEditor({ content }: ContentEditorProps) {
         // エラーが発生した場合は元のコンテンツを表示
         if (!result.success && content) {
           setOptimisticContent(content);
+          toast.error("コンテンツの保存に失敗しました");
           return;
         }
 
@@ -97,9 +98,7 @@ export default function ContentEditor({ content }: ContentEditorProps) {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // フォームを送信
-    form.handleSubmit().then(() => {
-      setIsEditingTitle(false);
-    });
+    form.handleSubmit("title");
   };
 
   // キャンセル時の処理
