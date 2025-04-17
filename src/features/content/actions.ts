@@ -2,14 +2,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import {
-  deleteContent,
-  getContentList,
-  createContent,
-  updateContent,
-} from "./content-api";
+import { deleteContent, createContent, updateContent } from "./content-api";
 import type { ContentSchema, CreateContentDTOSchema } from "./schemas/content";
+import { redirectAfterContentDeletionPath } from "@/lib/utils/redirectAfterContentDeletion";
 
 export async function deleteContentAction(
   content: ContentSchema,
@@ -18,22 +13,13 @@ export async function deleteContentAction(
   try {
     await deleteContent(content);
 
-    // パスの再検証
-    revalidatePath("/content");
-
     // 削除したコンテンツが現在表示中のコンテンツだった場合の処理
     if (currentContentId && currentContentId === content.id) {
-      // 削除後に最新のコンテンツリストを取得
-      const remainingContents = await getContentList();
-
-      if (remainingContents.length > 0) {
-        // リストの先頭のコンテンツに遷移
-        redirect(`/content/${remainingContents[0].id}`);
-      } else {
-        // コンテンツがない場合は新規作成ページへ遷移
-        redirect("/content/new");
-      }
+      const path = await redirectAfterContentDeletionPath();
+      return { success: true, path };
     }
+    // パスの再検証
+    revalidatePath("/content");
     return { success: true };
   } catch (error) {
     console.error("コンテンツの削除に失敗しました", error);
