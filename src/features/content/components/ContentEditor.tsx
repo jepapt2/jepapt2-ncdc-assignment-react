@@ -166,7 +166,8 @@ export default function ContentEditor({ content }: ContentEditorProps) {
 
         {/* 本文表示/編集部分 */}
         <div className="flex-1 min-h-0 overflow-hidden flex gap-2">
-          {isEditingBody ? (
+          {/* 既存のコンテンツ編集モードの場合 */}
+          {content && isEditingBody ? (
             <>
               <form.Field name="body">
                 {(field) => (
@@ -200,12 +201,16 @@ export default function ContentEditor({ content }: ContentEditorProps) {
               <div className="flex-1 overflow-y-auto rounded-md bg-white p-3">
                 <p className="text-body">{displayContent.body}</p>
               </div>
-              <ActionButton
-                action="edit"
-                variant="fillBrand"
-                size="lg"
-                onClick={() => setIsEditingBody(true)}
-              />
+              {content ? (
+                <ActionButton
+                  action="edit"
+                  variant="fillBrand"
+                  size="lg"
+                  onClick={() => setIsEditingBody(true)}
+                />
+              ) : (
+                <div className="w-9" />
+              )}
             </>
           )}
         </div>
