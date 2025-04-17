@@ -82,19 +82,14 @@ export async function updateContent(
   id: number,
   content: CreateContentDTOSchema,
 ): Promise<ContentSchema> {
-  try {
-    // APIリクエスト
-    const response = await putApi({
-      url: `${contentUrl}/${id}`,
-      data: content,
-      updateSchema: createContentDTOSchema,
-      responseSchema: contentSchema,
-    });
-    return response.data;
-  } catch (error) {
-    console.error(`コンテンツ(ID: ${id})の更新に失敗しました`, error);
-    throw new Error("コンテンツの更新に失敗しました");
-  }
+  // APIリクエスト
+  const response = await putApi({
+    url: `${contentUrl}/${id}`,
+    data: content,
+    updateSchema: createContentDTOSchema,
+    responseSchema: contentSchema,
+  });
+  return response.data;
 }
 
 /**
@@ -103,13 +98,8 @@ export async function updateContent(
  * @returns 削除結果
  */
 export async function deleteContent(content: ContentSchema): Promise<boolean> {
-  try {
-    const response = await deleteApi({
-      url: `${contentUrl}/${content.id}`,
-    });
-    return response.status === 204;
-  } catch (error) {
-    console.error(`コンテンツ(ID: ${content.id})の削除に失敗しました`, error);
-    throw new Error("コンテンツの削除に失敗しました");
-  }
+  const response = await deleteApi({
+    url: `${contentUrl}/${content.id}`,
+  });
+  return response.status === 204;
 }

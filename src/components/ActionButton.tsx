@@ -21,7 +21,7 @@ const buttonStyles = tv({
         text: "text-white",
       },
       fillGray: {
-        base: "bg-black30 hover:bg-gray-hover active:bg-gray-active",
+        base: "bg-black-30 hover:bg-gray-hover active:bg-gray-active",
         icon: "text-white",
         text: "text-white",
       },
@@ -100,7 +100,7 @@ const ActionButton = ({
   const { icon, text } = actionConfig[action];
 
   return (
-    <button className={baseStyle()} {...props}>
+    <button className={baseStyle()} type={type} {...props}>
       {icon}
       <span className={textStyle()}>{text}</span>
     </button>
