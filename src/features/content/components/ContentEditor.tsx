@@ -10,6 +10,8 @@ import {
 import { useForm } from "@tanstack/react-form";
 import { saveContentAction } from "../actions";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { getValidationErrorMessages } from "@/lib/utils/getValidationErrorMessages";
 
 interface ContentEditorProps {
   content?: ContentSchema;
@@ -34,8 +36,8 @@ export default function ContentEditor({ content }: ContentEditorProps) {
   type EditTarget = "title" | "body";
 
   const defaultValues: CreateContentDTOSchema = {
-    title: content?.title,
-    body: content?.body,
+    title: content?.title ?? "",
+    body: content?.body ?? "",
   };
 
   const form = useForm({
@@ -51,8 +53,9 @@ export default function ContentEditor({ content }: ContentEditorProps) {
 
         // 更新するフィールドを決定
         const contentToSave: CreateContentDTOSchema = {
-          title: saveValueKey === "title" ? value.title : content?.title,
-          body: saveValueKey === "body" ? value.body : content?.body,
+          title:
+            (saveValueKey === "title" ? value.title : content?.title) ?? "",
+          body: (saveValueKey === "body" ? value.body : content?.body) ?? "",
         };
 
         const result = await saveContentAction({
@@ -81,6 +84,12 @@ export default function ContentEditor({ content }: ContentEditorProps) {
   });
   // ボタンクリック時の処理
   const buttonClickHandler = async (saveValueKey: "title" | "body") => {
+    const messages = getValidationErrorMessages(form.getAllErrors());
+    if (messages.length) {
+      toast.error(messages.map((message) => <p key={message}>{message}</p>));
+      return;
+    }
+
     // フォーム送信処理
     await form.handleSubmit(saveValueKey);
   };
@@ -96,7 +105,7 @@ export default function ContentEditor({ content }: ContentEditorProps) {
   // キャンセル時の処理
   const handleTitleCancel = () => {
     setIsEditingTitle(false);
-    form.setFieldValue("title", displayContent.title);
+    form.setFieldValue("title", content?.title ?? "");
   };
   const handleBodyCancel = () => {
     setIsEditingBody(false);
