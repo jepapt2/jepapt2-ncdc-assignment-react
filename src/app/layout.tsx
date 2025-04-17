@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Audiowide, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import "@/lib/styles/reset.css";
+import { Toaster } from "sonner";
 
 const audiowide = Audiowide({
   display: "swap",
@@ -29,6 +30,7 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${noto.variable} ${audiowide.variable} antialiased`}>
         {children}
+        <Toaster position="bottom-center" />
       </body>
     </html>
   );
