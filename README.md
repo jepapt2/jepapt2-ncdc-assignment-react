@@ -1,5 +1,3 @@
-
-
 https://github.com/user-attachments/assets/74b8ad8b-93c9-4474-bb5f-bde3b6edaa84
 
 
@@ -99,8 +97,7 @@ NEXT_PUBLIC_API_URL=
 - Tanstack Form (フォームライブラリ)
 - Jest & React Testing Library (テスト)
 
-##テスト内容
-
+## テスト内容
 
 ### コンポーネントテスト
 
@@ -109,5 +106,44 @@ NEXT_PUBLIC_API_URL=
 - フォーム入力とバリデーション
 - コンテンツの保存処理
 
+## 学習目的で採用した新しめのライブラリ
 
+### Valibot
+**概要**: 軽量でタイプセーフなバリデーションライブラリ。  
+- バンドルサイズが小さい（Zodと比較して約10倍軽量）
+- zodの書き方(メソッドチェーン)とは異なるので移行は難しい
+**ドキュメント**: https://valibot.dev/guides/introduction/
+**紹介記事**: https://zenn.dev/uttk/articles/introduce-valibot
+
+### Tanstack Form
+**概要**: React用の型安全なフォームライブラリ。  
+- standard schema対応(https://zenn.dev/caffe_latte_623/articles/standard-schema)でアダプタなしでvalibotでバリデーションできるため採用
+- 厳密な型安全性で入れ子構造の型推論が優れている(フォームの構造が簡単なので実感はできず)
+- バリデーションのタイミングを細かく設定できる
+**ドキュメント**: https://tanstack.com/form/latest/docs/overview
+**紹介記事**: https://zenn.dev/takumaru/articles/a01bad21517f2e
+
+### shadcn/ui
+**概要**: コピー&ペースト可能なReact UIコンポーネント集。  
+- コードをプロジェクトに直接取り込める
+- Tailwind CSSとの互換性  
+**ドキュメント**: https://ui.shadcn.com/docs
+**紹介記事**: https://note.com/akane_desu/n/n1276d86d388e
+
+### Biome
+**概要**: Rustで書かれた高速なJavaScript/TypeScriptツールチェイン。  
+- 高速な実行速度
+- リンターとフォーマッターが一体化
+- 低い設定コスト
+- ESLintやPrettierの代替として機能
+- prettier＋eslintと違って細かい設定はできない(importするファイルの順番など)
+**ドキュメント**: https://biomejs.dev/ja/
+**紹介記事**: https://zenn.dev/ako/articles/b8a686843f6b83
+
+### Lefthook
+**概要**: Gitフックを管理するためのツール。  
+- コミット前やプッシュ前に自動的にリント・テストを実行
+- 比較対象になるhuskyも使用したことがないのでなんとも言えないが、設定が簡単？
+**ドキュメント**: https://lefthook.dev/installation/
+**紹介記事**: https://zenn.dev/sukesan0720/articles/87a8c005f82522
 
