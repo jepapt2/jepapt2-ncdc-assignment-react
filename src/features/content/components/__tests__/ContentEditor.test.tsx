@@ -4,6 +4,8 @@ import userEvent from "@testing-library/user-event";
 import ContentEditor from "../ContentEditor";
 import { saveContentAction } from "../../actions";
 import "@testing-library/jest-dom";
+import { toast } from "sonner";
+
 // モックの設定
 jest.mock("../../actions", () => ({
   saveContentAction: jest.fn(),
@@ -196,6 +198,156 @@ describe("ContentEditor", () => {
 
       // APIが呼ばれていないことを確認
       expect(saveContentAction).not.toHaveBeenCalled();
+    });
+  });
+
+  // バリデーションのテスト
+  describe("バリデーション", () => {
+    test("タイトルが空の場合はバリデーションエラーが表示され保存されない", async () => {
+      const user = userEvent.setup();
+
+      render(<ContentEditor />);
+
+      // タイトルを空にする
+      const titleInput = screen.getByRole("textbox");
+      await user.clear(titleInput);
+
+      // 保存ボタンをクリック
+      const saveButton = screen.getByText("Save");
+      await user.click(saveButton);
+
+      // エラートーストが表示されることを確認
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalled();
+      });
+
+      // APIが呼ばれていないことを確認
+      expect(saveContentAction).not.toHaveBeenCalled();
+    });
+
+    test("タイトルが50文字を超える場合はバリデーションエラーが表示され保存されない", async () => {
+      const user = userEvent.setup();
+
+      render(<ContentEditor />);
+
+      // 50文字を超えるタイトルを入力
+      const titleInput = screen.getByRole("textbox");
+      await user.clear(titleInput);
+      const longTitle = "あ".repeat(51); // 51文字
+      await user.type(titleInput, longTitle);
+
+      // 保存ボタンをクリック
+      const saveButton = screen.getByText("Save");
+      await user.click(saveButton);
+
+      // エラートーストが表示されることを確認
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalled();
+      });
+
+      // APIが呼ばれていないことを確認
+      expect(saveContentAction).not.toHaveBeenCalled();
+    });
+
+    test("本文が10文字未満の場合はバリデーションエラーが表示され保存されない", async () => {
+      const user = userEvent.setup();
+
+      // モックコンテンツを作成
+      const testContent = {
+        id: 456,
+        title: "テストタイトル",
+        body: "これは10文字以上の本文です",
+      };
+
+      render(<ContentEditor content={testContent} />);
+
+      // 本文編集ボタンをクリック
+      const editButtons = screen.getAllByText("Edit");
+      await user.click(editButtons[1]); // 本文編集ボタン
+
+      // 10文字未満の本文を入力
+      const bodyTextarea = screen.getByRole("textbox");
+      await user.clear(bodyTextarea);
+      await user.type(bodyTextarea, "短い本文"); // 4文字
+
+      // 保存ボタンをクリック
+      const saveButton = screen.getByText("Save");
+      await user.click(saveButton);
+
+      // エラートーストが表示されることを確認
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalled();
+      });
+
+      // APIが呼ばれていないことを確認
+      expect(saveContentAction).not.toHaveBeenCalled();
+    });
+
+    test("本文が1000文字を超える場合はバリデーションエラーが表示され保存されない", async () => {
+      const user = userEvent.setup();
+
+      // モックコンテンツを作成
+      const testContent = {
+        id: 456,
+        title: "テストタイトル",
+        body: "これは10文字以上の本文です",
+      };
+
+      render(<ContentEditor content={testContent} />);
+
+      // 本文編集ボタンをクリック
+      const editButtons = screen.getAllByText("Edit");
+      await user.click(editButtons[1]); // 本文編集ボタン
+
+      // 1000文字を超える本文を入力
+      const bodyTextarea = screen.getByRole("textbox");
+      await user.clear(bodyTextarea);
+      const longBody = "あ".repeat(1001); // 1001文字
+      await user.type(bodyTextarea, longBody);
+
+      // 保存ボタンをクリック
+      const saveButton = screen.getByText("Save");
+      await user.click(saveButton);
+
+      // エラートーストが表示されることを確認
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalled();
+      });
+
+      // APIが呼ばれていないことを確認
+      expect(saveContentAction).not.toHaveBeenCalled();
+    });
+
+    test("本文が空でも保存できる", async () => {
+      const user = userEvent.setup();
+
+      // APIのモックレスポンスを設定
+      (saveContentAction as jest.Mock).mockResolvedValue({
+        success: true,
+        content: { id: 789, title: "タイトルのみ", body: "" },
+      });
+
+      render(<ContentEditor />);
+
+      // タイトルを入力
+      const titleInput = screen.getByRole("textbox");
+      await user.clear(titleInput);
+      await user.type(titleInput, "タイトルのみ");
+
+      // 保存ボタンをクリック
+      const saveButton = screen.getByText("Save");
+      await user.click(saveButton);
+
+      // APIが正しいパラメータで呼ばれたことを確認
+      await waitFor(() => {
+        expect(saveContentAction).toHaveBeenCalledWith({
+          content: {
+            title: "タイトルのみ",
+            body: "",
+          },
+          currentContent: undefined,
+        });
+      });
     });
   });
 });
