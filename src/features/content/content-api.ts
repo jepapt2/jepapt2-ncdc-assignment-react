@@ -57,19 +57,13 @@ export async function getContent(id: number): Promise<ContentSchema> {
 export async function createContent(
   content: CreateContentDTOSchema,
 ): Promise<ContentSchema> {
-  try {
-    // APIリクエスト
-    const response = await postApi({
-      url: contentUrl,
-      data: content,
-      createSchema: createContentDTOSchema,
-      responseSchema: contentSchema,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("コンテンツの作成に失敗しました", error);
-    throw new Error("コンテンツの作成に失敗しました");
-  }
+  const response = await postApi({
+    url: contentUrl,
+    data: content,
+    createSchema: createContentDTOSchema,
+    responseSchema: contentSchema,
+  });
+  return response.data;
 }
 
 /**
