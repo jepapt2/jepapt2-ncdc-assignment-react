@@ -17,17 +17,11 @@ const contentUrl = "/content";
  * @returns コンテンツ一覧
  */
 export async function getContentList(): Promise<ContentListSchema> {
-  try {
-    // APIリクエスト
-    const response = await getApi({
-      url: contentUrl,
-      schema: contentListSchema,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("コンテンツ一覧の取得に失敗しました", error);
-    throw new Error("コンテンツ一覧の取得に失敗しました");
-  }
+  const response = await getApi({
+    url: contentUrl,
+    schema: contentListSchema,
+  });
+  return response.data;
 }
 
 /**
@@ -36,17 +30,11 @@ export async function getContentList(): Promise<ContentListSchema> {
  * @returns コンテンツ
  */
 export async function getContent(id: number): Promise<ContentSchema> {
-  try {
-    // APIリクエスト
-    const response = await getApi({
-      url: `${contentUrl}/${id}`,
-      schema: contentSchema,
-    });
-    return response.data;
-  } catch (error) {
-    console.error(`コンテンツ(ID: ${id})の取得に失敗しました`, error);
-    throw new Error("コンテンツの取得に失敗しました");
-  }
+  const response = await getApi({
+    url: `${contentUrl}/${id}`,
+    schema: contentSchema,
+  });
+  return response.data;
 }
 
 /**
