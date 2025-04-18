@@ -157,4 +157,16 @@ NEXT_PUBLIC_API_URL=
 
 ## つまづいたこと
 
-### クライアントコンポーネントの小要素にサーバーコンポーネントを置けない
+### クライアントコンポーネント中ににサーバーコンポーネントを置けない
+- コンテンツリスト内実装時に気づく
+- サーバーコンポーネント→クライアントコンポーネントのレンダリングの順序
+- データの流れを意識する必要がある
+- 状態管理ライブラリを使ってクライアントコンポーネント間で状態管理する
+
+### コンテンツ投稿後のリスト再フェッチ
+- next.jsの[revalidatePath](https://nextjs.org/docs/app/api-reference/functions/revalidatePath)を使ってURLパスを再検証
+- サーバー側でしか使用できないのでクライアントコンポーネントで使うにはサーバーアクションの作成が必要(ファイルの一行目か個別の場合は関数の一行目)
+- 特定のフェッチリクエストだけ再検証したい場合はrevalidateTagを使用する
+  - リフェッチする対象のタグ付けは[fetchで指定する](https://zenn.dev/cybozu_frontend/articles/server-actions-and-revalidate#revalidatetag-%E3%81%AE%E5%8B%95%E3%81%8D%E3%82%92%E3%81%BF%E3%81%A6%E3%81%BF%E3%82%8B)のでaxiosを使うべきではなかった
+    
+
