@@ -10,6 +10,8 @@ https://github.com/user-attachments/assets/74b8ad8b-93c9-4474-bb5f-bde3b6edaa84
 - yarn 1.22.x 以上
 
 
+
+
 ## 開発ツール
 
 - [Biome](https://biomejs.dev/) - リンターとフォーマッター
@@ -32,6 +34,8 @@ NEXT_PUBLIC_API_URL=
 ```
 
 環境変数が設定されていない場合、API通信が失敗する可能性があります。
+
+
 
 # プロジェクトのディレクトリ構造
 
@@ -89,13 +93,16 @@ NEXT_PUBLIC_API_URL=
 ## 技術スタック
 
 - Next.js 15.2.4
+  - App routerを使用
 - React 19.0.0
+  - データフェッチはサーバーコンポーネントを使用
 - TypeScript 5
 - Valibot (バリデーションライブラリ)
 - Jotai (状態管理)
 - TailwindCSS (スタイリング)
 - Tanstack Form (フォームライブラリ)
 - Jest & React Testing Library (テスト)
+
 
 ## テスト内容
 
@@ -147,3 +154,7 @@ NEXT_PUBLIC_API_URL=
 **ドキュメント**: https://lefthook.dev/installation/
 **紹介記事**: https://zenn.dev/sukesan0720/articles/87a8c005f82522
 
+
+## つまづいたこと
+
+### クライアントコンポーネントの小要素にサーバーコンポーネントを置けない
